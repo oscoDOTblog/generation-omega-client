@@ -7,7 +7,7 @@ import './App.css';
 // import { ethers } from 'ethers';
 
 // Custom Components
-// import Join from './components/Join';
+import MintCharacter from './components/MintCharacter';
 // import Home from './components/Home';
 import LoadingIndicator from './components/LoadingIndicator';
 
@@ -108,8 +108,7 @@ const App = () => {
       * Scenario #2: Connected Wallet but no Player NFT
       */
     } else if (currentAccount && !characterNFT) {
-      return  <p className="sub-text">You are connected!!</p>
-      // return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+        return <MintCharacter setCharacterNFT={setCharacterNFT} />;
     /*
     * Scenario #3: If there is a connected wallet and characterNFT, it's time to battle!
     */
