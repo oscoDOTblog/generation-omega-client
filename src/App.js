@@ -1,14 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import twitterLogo from './assets/twitter-logo.svg';
+
+// Blockchain Imports 
+// import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
+// import generationOmega from './utils/generationOmega.json';
+// import { ethers } from 'ethers';
+
+// Custom Components
+// import Join from './components/Join';
+// import Home from './components/Home';
+import LoadingIndicator from './components/LoadingIndicator';
+
 
 // Constants
+import twitterLogo from './assets/twitter-logo.svg';
 const TWITTER_HANDLE = 'GenerationOmega';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
-
+  // State
   const [currentAccount, setCurrentAccount] = useState(null);
+  const [characterNFT, setCharacterNFT] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -67,21 +80,21 @@ const App = () => {
     }
   };
 
-  useEffect(() => {
-    checkIfWalletIsConnected();
-  }, []);
+  // Render Methods
+  const renderContent = () => {
+    if (isLoading) {
+      return <LoadingIndicator />;
+    }  
 
-  return (
-    <div className="App">
-      <div className="container">
-        <div className="header-container">
-          <p className="header gradient-text">⚔️ Metaverse Slayer ⚔️</p>
-          <p className="sub-text">Team up to protect the Metaverse!</p>
-        </div>
+    /*
+    * Scenario #1: Account Not Connected
+    */
+    if (!currentAccount) {
+      return (
         <div className="connect-wallet-container">
           <img
-            src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
-            alt="Monty Python Gif"
+            src="http://pa1.narvii.com/6335/113796f7ded0f179eee7ea4ae68db23ca97412ce_hq.gif"
+            alt="Sword Art Online Gif"
           />
           <button
             className="cta-button connect-wallet-button"
@@ -89,6 +102,69 @@ const App = () => {
           >
             Connect Wallet To Get Started
           </button>
+        </div>
+      );
+      /*
+      * Scenario #2: Connected Wallet but no Player NFT
+      */
+    } else if (currentAccount && !characterNFT) {
+      return  <p className="sub-text">You are connected!!</p>
+      // return <SelectCharacter setCharacterNFT={setCharacterNFT} />;
+    /*
+    * Scenario #3: If there is a connected wallet and characterNFT, it's time to battle!
+    */
+    } else if (currentAccount && characterNFT) {
+      return <div>You have minted your NFT! Here are its stats...</div>
+      // return <Arena characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
+    }
+  };
+
+  useEffect(() => {
+    setIsLoading(true);
+    checkIfWalletIsConnected();
+  }, []);
+
+  useEffect(() => {
+    /*
+    * The function we will call that interacts with out smart contract
+    */
+    // const fetchNFTMetadata = async () => {
+    //   console.log('Checking for Character NFT on address:', currentAccount);
+
+    //   const provider = new ethers.providers.Web3Provider(window.ethereum);
+    //   const signer = provider.getSigner();
+    //   const gameContract = new ethers.Contract(
+    //     CONTRACT_ADDRESS,
+    //     myEpicGame.abi,
+    //     signer
+    //   );
+
+    //   const txn = await gameContract.checkIfUserHasNFT();
+    //   if (txn.name) {
+    //     console.log('User has character NFT');
+    //     setCharacterNFT(transformCharacterData(txn));
+    //   } else {
+    //     console.log('No character NFT found!');
+    //   }
+       setIsLoading(false);
+    // };
+
+    /*
+    * We only want to run this, if we have a connected wallet
+    */
+    if (currentAccount) {
+      console.log('CurrentAccount:', currentAccount);
+      // fetchNFTMetadata();
+    }
+  }, [currentAccount]);
+
+  return (
+    <div className="App">
+      <div className="container">
+        <div className="header-container">
+          <p className="header gradient-text">Generation Omega</p>
+          <p className="sub-text">Can you survive in this post-apocalyptic world?</p>
+          {renderContent()}
         </div>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
