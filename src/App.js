@@ -1,25 +1,62 @@
-import logo from './logo.svg';
+import React, { useEffect } from 'react';
 import './App.css';
+import twitterLogo from './assets/twitter-logo.svg';
 
-function App() {
+// Constants
+const TWITTER_HANDLE = 'GenerationOmega';
+const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
+
+const App = () => {
+  /*
+   * Start by creating a new action that we will run on component load
+   */
+  // Actions
+  const checkIfWalletIsConnected = () => {
+    /*
+     * First make sure we have access to window.ethereum
+     */
+    const { ethereum } = window;
+
+    if (!ethereum) {
+      console.log('Make sure you have MetaMask!');
+      return;
+    } else {
+      console.log('We have the ethereum object', ethereum);
+    }
+  };
+
+  /*
+   * This runs our function when the page loads.
+   */
+  useEffect(() => {
+    checkIfWalletIsConnected();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="container">
+        <div className="header-container">
+          <p className="header gradient-text">⚔️ Metaverse Slayer ⚔️</p>
+          <p className="sub-text">Team up to protect the Metaverse!</p>
+        </div>
+        <div className="connect-wallet-container">
+          <img
+            src="https://64.media.tumblr.com/tumblr_mbia5vdmRd1r1mkubo1_500.gifv"
+            alt="Monty Python Gif"
+          />
+        </div>
+        <div className="footer-container">
+          <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
+          <a
+            className="footer-text"
+            href={TWITTER_LINK}
+            target="_blank"
+            rel="noreferrer"
+          >{`Twitter -> @${TWITTER_HANDLE}`}</a>
+        </div>
+      </div>
     </div>
   );
-}
+};
 
 export default App;
