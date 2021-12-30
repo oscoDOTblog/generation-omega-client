@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
+import { Buffer } from 'buffer';
 
 // Blockchain Imports 
 import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
@@ -182,19 +183,29 @@ const App = () => {
       const signer = provider.getSigner();
       const gameContract = new ethers.Contract(
         CONTRACT_ADDRESS,
-        generationOmega,
+        generationOmega, // myEpicGame.abi,
         signer
       );
-      console.log("Hi3");
 
-
-      const txn = await gameContract.tokenURI();
-      if (txn.name) {
-        console.log('User has character NFT');
-        setCharacterNFT(transformCharacterData(txn));
-      } else {
-        console.log('No character NFT found!');
-      }
+      console.log(gameContract)
+      const characterRawData = (await gameContract.tokenURI(0))
+      console.log(characterRawData) // TODO
+      const characterBase64 = characterRawData.split(',')[1]
+      const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
+      console.log(characterJSON)
+      // await gameContract.ownerClaim(1)
+      // console.log(await gameContract.tokenURI(0))
+      // const txn = await gameContract.tokenURI('0xdc557453ab3f30b35d9a361337a05a2874e3ebab'); //  const txn = await gameContract.checkIfUserHasNFT();
+      // if (txn.name) {
+      //   console.log('User has character NFT');
+      //   /// setCharacterNFT(transformCharacterData(txn));
+      // } else {
+      //   console.log('No character NFT found!');
+      // }
+      // try {
+      //   } catch (error) {
+      //     console.log(error);
+      //   }
        setIsLoading(false);
     };
 
