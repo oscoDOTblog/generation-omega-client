@@ -2,9 +2,10 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // Blockchain Imports 
+import { CONTRACT_ADDRESS } from './constants';
 // import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
-// import generationOmega from './utils/generationOmega.json';
-// import { ethers } from 'ethers';
+import GenerationOmega from './utils/GenerationOmega.json';
+import { ethers } from 'ethers';
 
 // Custom Components
 import MintCharacter from './components/MintCharacter';
@@ -19,9 +20,33 @@ const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
 const App = () => {
   // State
+  const [isCorrectNetwork, setIsCorrectNetwork] = useState(null);
   const [currentAccount, setCurrentAccount] = useState(null);
   const [characterNFT, setCharacterNFT] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+  // const checkNetwork = async () => {
+  //   // try { 
+  //   //   const { ethereum } = window;
+  //   //   console.log("Network Verison: " + ethereum.networkVersion)
+  //   //   setCurrentNetwork(window.ethereum.networkVersion)
+  //   // } catch(error) {
+  //   //   console.log(error)
+  //   // }
+  //   try {
+  //     const { ethereum } = window;
+
+  //     if (!ethereum) {
+  //       console.log('Make sure you have MetaMask!');
+  //       return;
+  //     } else {
+  //       console.log('We have the ethereum object', ethereum);
+  //       const networkVerison = await ethereum.request({ method: 'eth_accounts' });
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -47,6 +72,19 @@ const App = () => {
           setCurrentAccount(account);
         } else {
           console.log('No authorized account found');
+        }
+
+
+        /*
+         * Check if we are on the correct network verison
+         */
+        const networkVersion = await ethereum.request({ method: 'eth_chainId' });
+        if (networkVersion === '0x4') {
+          console.log('Client connected to CORRECT Network Version: ' + networkVersion);
+          setIsCorrectNetwork(true);
+        } else {
+          console.log('Client connected to INCORRECT Network Version: ' + networkVersion);
+          setIsCorrectNetwork(false);
         }
       }
     } catch (error) {
@@ -87,9 +125,20 @@ const App = () => {
     }  
 
     /*
+    * Scenario #0: Wrong Network Not Connected
+    */
+    if (!isCorrectNetwork) {
+      return (
+        <div className="select-character-container">
+          <h2>You are on the wrong network! Please connect to Rinkeby to continue.</h2>
+        </div>
+      );
+    }
+
+    /*
     * Scenario #1: Account Not Connected
     */
-    if (!currentAccount) {
+    else if (!currentAccount) {
       return (
         <div className="connect-wallet-container">
           <img
