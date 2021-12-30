@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // Blockchain Imports 
-import { CONTRACT_ADDRESS } from './constants';
-// import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
-import GenerationOmega from './utils/GenerationOmega.json';
+import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
+import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
 
 // Custom Components
@@ -176,33 +175,35 @@ const App = () => {
     /*
     * The function we will call that interacts with out smart contract
     */
-    // const fetchNFTMetadata = async () => {
-    //   console.log('Checking for Character NFT on address:', currentAccount);
+    const fetchNFTMetadata = async () => {
+      console.log('Checking for Character NFT on address:', currentAccount);
 
-    //   const provider = new ethers.providers.Web3Provider(window.ethereum);
-    //   const signer = provider.getSigner();
-    //   const gameContract = new ethers.Contract(
-    //     CONTRACT_ADDRESS,
-    //     myEpicGame.abi,
-    //     signer
-    //   );
+      const provider = new ethers.providers.Web3Provider(window.ethereum);
+      const signer = provider.getSigner();
+      const gameContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        generationOmega,
+        signer
+      );
+      console.log("Hi3");
 
-    //   const txn = await gameContract.checkIfUserHasNFT();
-    //   if (txn.name) {
-    //     console.log('User has character NFT');
-    //     setCharacterNFT(transformCharacterData(txn));
-    //   } else {
-    //     console.log('No character NFT found!');
-    //   }
+
+      const txn = await gameContract.tokenURI();
+      if (txn.name) {
+        console.log('User has character NFT');
+        setCharacterNFT(transformCharacterData(txn));
+      } else {
+        console.log('No character NFT found!');
+      }
        setIsLoading(false);
-    // };
+    };
 
     /*
     * We only want to run this, if we have a connected wallet
     */
     if (currentAccount) {
       console.log('CurrentAccount:', currentAccount);
-      // fetchNFTMetadata();
+      fetchNFTMetadata();
     }
   }, [currentAccount]);
 
