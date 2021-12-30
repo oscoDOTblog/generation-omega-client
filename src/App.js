@@ -192,7 +192,18 @@ const App = () => {
       console.log(characterRawData) // TODO
       const characterBase64 = characterRawData.split(',')[1]
       const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
-      console.log(characterJSON)
+      console.log(characterJSON.attributes)
+      for (let i = 0; i < characterJSON.attributes.length; i++) {
+        let traitType = characterJSON.attributes[i]["trait_type"]
+        let traitValue = characterJSON.attributes[i]["value"]
+        let maxValue = characterJSON.attributes[i]["max_value"]
+        if (maxValue) {
+          console.log(traitType + ": " + traitValue + "/" + maxValue)
+        } else {
+          console.log(traitType + ": " + traitValue)
+        }
+        
+      }
       // await gameContract.ownerClaim(1)
       // console.log(await gameContract.tokenURI(0))
       // const txn = await gameContract.tokenURI('0xdc557453ab3f30b35d9a361337a05a2874e3ebab'); //  const txn = await gameContract.checkIfUserHasNFT();
