@@ -8,16 +8,16 @@ const transformCharacterData = (characterDataRaw) => {
     const characterAttributes = characterJSON.attributes
     // console.log(characterAttributes) // DEBUG
     const characterData = {
-      strength : characterJSON.attributes[0]["value"],
-      dexterity: characterJSON.attributes[1]["value"],
-      constitution: characterJSON.attributes[2]["value"],
-      intelligence: characterJSON.attributes[3]["value"],
-      wisdom: characterJSON.attributes[4]["value"],
-      charisma: characterJSON.attributes[5]["value"],
+      strength : characterAttributes[0]["value"],
+      dexterity: characterAttributes[1]["value"],
+      constitution: characterAttributes[2]["value"],
+      intelligence: characterAttributes[3]["value"],
+      wisdom: characterAttributes[4]["value"],
+      charisma: characterAttributes[5]["value"],
       skills: [
-        characterJSON.attributes[6]["value"],
-        characterJSON.attributes[7]["value"],
-        characterJSON.attributes[8]["value"],
+        characterAttributes[6]["value"],
+        characterAttributes[7]["value"],
+        characterAttributes[8]["value"],
       ]
     }
     // return {

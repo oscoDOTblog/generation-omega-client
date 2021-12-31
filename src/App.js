@@ -128,9 +128,9 @@ const App = () => {
           </button>
         </div>
       );
-      /*
-      * Scenario #2: Connected Wallet but no Player NFT
-      */
+    /*
+    * Scenario #2: Connected Wallet but no Player NFT
+    */
     } else if (currentAccount && !characterNFT) {
         return <MintCharacter setCharacterNFT={setCharacterNFT} />;
     /*
@@ -174,16 +174,19 @@ const App = () => {
         signer
       );
 
-      // console.log(gameContract) // DEBUG
-      const characterDataRaw = (await gameContract.tokenURI(0))
-      // console.log(characterDataRaw) // DEBUG
-
-      if (characterDataRaw) {
-        console.log('User has character NFT');
-        setCharacterNFT(transformCharacterData(characterDataRaw));
-      } else {
-        console.log('No character NFT found!');
-      }     
+      try {
+        // console.log(gameContract) // DEBUG
+        const characterDataRaw = (await gameContract.tokenURI(45))
+        // console.log(characterDataRaw) // DEBUG
+        if (characterDataRaw) {
+          console.log('User has character NFT');
+          setCharacterNFT(transformCharacterData(characterDataRaw));
+        } else {
+          console.log('No character NFT found!');
+        }
+      } catch (error) {
+        console.log(error);
+      }
        setIsLoading(false);
       // await gameContract.ownerClaim(1)
       // console.log(await gameContract.tokenURI(0))
