@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // Blockchain Imports 
-import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
+import { CONTRACT_ADDRESS, MAX_VALUE, transformCharacterData } from './constants';
 import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
 
@@ -24,29 +24,6 @@ const App = () => {
   const [characterNFT, setCharacterNFT] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
-  // const checkNetwork = async () => {
-  //   // try { 
-  //   //   const { ethereum } = window;
-  //   //   console.log("Network Verison: " + ethereum.networkVersion)
-  //   //   setCurrentNetwork(window.ethereum.networkVersion)
-  //   // } catch(error) {
-  //   //   console.log(error)
-  //   // }
-  //   try {
-  //     const { ethereum } = window;
-
-  //     if (!ethereum) {
-  //       console.log('Make sure you have MetaMask!');
-  //       return;
-  //     } else {
-  //       console.log('We have the ethereum object', ethereum);
-  //       const networkVerison = await ethereum.request({ method: 'eth_accounts' });
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }
-
   const checkIfWalletIsConnected = async () => {
     try {
       const { ethereum } = window;
@@ -56,7 +33,6 @@ const App = () => {
         return;
       } else {
         console.log('We have the ethereum object', ethereum);
-
         /*
          * Check if we're authorized to access the user's wallet
          */
@@ -161,7 +137,19 @@ const App = () => {
     * Scenario #3: If there is a connected wallet and characterNFT, it's time to battle!
     */
     } else if (currentAccount && characterNFT) {
-      return <div>You have minted your NFT! Here are its stats...</div>
+      const skills = characterNFT.skills
+      return <div>
+        <p className="sub-text">You have minted your NFT! Here are its stats...</p>
+        <p className="sub-text">Strength: {characterNFT.strength}/{MAX_VALUE}</p>
+        <p className="sub-text">Dexterity: {characterNFT.dexterity}/{MAX_VALUE}</p>
+        <p className="sub-text">Constitution: {characterNFT.constitution}/{MAX_VALUE}</p>
+        <p className="sub-text">Intelligence: {characterNFT.intelligence}/{MAX_VALUE}</p>
+        <p className="sub-text">Wisdom: {characterNFT.wisdom}/{MAX_VALUE}</p>
+        <p className="sub-text">Charisma: {characterNFT.charisma}/{MAX_VALUE}</p>
+        {skills.map((skill,index) =>
+            <p key={index} className="sub-text">Skill: {skill} </p>
+        )}
+      </div>
       // return <Arena characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
     }
   };
@@ -186,31 +174,17 @@ const App = () => {
         signer
       );
 
-      console.log(gameContract)
+      // console.log(gameContract) // DEBUG
       const characterDataRaw = (await gameContract.tokenURI(0))
-      console.log(characterDataRaw) // TODO
+      // console.log(characterDataRaw) // DEBUG
 
       if (characterDataRaw) {
         console.log('User has character NFT');
         setCharacterNFT(transformCharacterData(characterDataRaw));
-        console.log(characterNFT)
       } else {
         console.log('No character NFT found!');
       }     
-      // const characterBase64 = characterRawData.split(',')[1]
-      // const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
-      // console.log(characterJSON.attributes)
-      // for (let i = 0; i < characterJSON.attributes.length; i++) {
-      //   let traitType = characterJSON.attributes[i]["trait_type"]
-      //   let traitValue = characterJSON.attributes[i]["value"]
-      //   let maxValue = characterJSON.attributes[i]["max_value"]
-      //   if (maxValue) {
-      //     console.log(traitType + ": " + traitValue + "/" + maxValue)
-      //   } else {
-      //     console.log(traitType + ": " + traitValue)
-      //   }
-      // }
-
+       setIsLoading(false);
       // await gameContract.ownerClaim(1)
       // console.log(await gameContract.tokenURI(0))
       // const txn = await gameContract.tokenURI('0xdc557453ab3f30b35d9a361337a05a2874e3ebab'); //  const txn = await gameContract.checkIfUserHasNFT();
@@ -224,7 +198,6 @@ const App = () => {
       //   } catch (error) {
       //     console.log(error);
       //   }
-       setIsLoading(false);
     };
 
     /*
