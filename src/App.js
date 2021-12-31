@@ -185,22 +185,12 @@ const App = () => {
           console.log('No character NFT found!');
         }
       } catch (error) {
-        console.log(error);
+        if (error.toString().includes("URI query for nonexistent token")){
+          console.log("URI query for nonexistent token");
+        }
+        // console.log("Full Error: " + error.toString()); // DEBUG
       }
        setIsLoading(false);
-      // await gameContract.ownerClaim(1)
-      // console.log(await gameContract.tokenURI(0))
-      // const txn = await gameContract.tokenURI('0xdc557453ab3f30b35d9a361337a05a2874e3ebab'); //  const txn = await gameContract.checkIfUserHasNFT();
-      // if (txn.name) {
-      //   console.log('User has character NFT');
-      //   /// setCharacterNFT(transformCharacterData(txn));
-      // } else {
-      //   console.log('No character NFT found!');
-      // }
-      // try {
-      //   } catch (error) {
-      //     console.log(error);
-      //   }
     };
 
     /*
