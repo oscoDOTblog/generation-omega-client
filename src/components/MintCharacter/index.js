@@ -3,14 +3,35 @@ import './MintCharacter.css';
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, transformCharacterData } from '../../constants';
 import generationOmega from '../../utils/GenerationOmega.json';
+import LoadingIndicator from '../LoadingIndicator';
+import mintThumb from '../../assets/post2.png';
 
 
 /*
  * Don't worry about setCharacterNFT just yet, we will talk about it soon!
  */
 const MintCharacter = ({ setCharacterNFT }) => {
-  const [characters, setCharacters] = useState([]);
+  // State
   const [gameContract, setGameContract] = useState(null);
+  const [mintingCharacter, setMintingCharacter] = useState(false);
+
+  // Actions
+  const mintCharacterNFTAction = () => async () => {
+    console.log("Hiya! Minty!");
+    try {
+      if (gameContract) {
+        setMintingCharacter(true);
+        console.log('Minting character in progress...');
+        const mintTxn = await gameContract.ownerClaim(1);
+        await mintTxn.wait();
+        console.log('mintTxn:', mintTxn);
+        setMintingCharacter(false);
+      }
+    } catch (error) {
+      console.warn('MintCharacterAction Error:', error);
+      setMintingCharacter(false);
+    }
+  };
 
   // UseEffect
   useEffect(() => {
@@ -34,44 +55,35 @@ const MintCharacter = ({ setCharacterNFT }) => {
     }
   }, []);
 
-  useEffect(() => {
-    const getCharacters = async () => {
-      try {
-        console.log('Getting contract characters to mint');
-  
-        /*
-         * Call contract to get all mint-able characters
-         */
-        const charactersTxn = await gameContract.getAllDefaultCharacters();
-        console.log('charactersTxn:', charactersTxn);
-  
-        /*
-         * Go through all of our characters and transform the data
-         */
-        const characters = charactersTxn.map((characterData) =>
-          transformCharacterData(characterData)
-        );
-  
-        /*
-         * Set all mint-able characters in state
-         */
-        setCharacters(characters);
-      } catch (error) {
-        console.error('Something went wrong fetching characters:', error);
-      }
-    };
-  
-    /*
-     * If our gameContract is ready, let's get characters!
-     */
-    if (gameContract) {
-      getCharacters();
-    }
-  }, [gameContract]);
 
   return (
     <div className="select-character-container">
-      <h2>Mint Your Hero. Choose wisely.</h2>
+      <h2>You take your first step into the unknown...</h2>
+      <img
+        src={mintThumb}
+        alt="Welcome to the Wasteland"
+      />
+      <br/>
+      <button
+        className="cta-button connect-wallet-button"
+        // onClick={() => console.log("heya")}
+        onClick={mintCharacterNFTAction()}
+      >
+        Realize Your Existence (Mint Character)
+      </button>
+      {/* Only show our loading state if mintingCharacter is true */}
+      {mintingCharacter && (
+        <div className="loading">
+          <div className="indicator">
+            <LoadingIndicator />
+            <p>Minting In Progress...</p>
+          </div>
+          <img
+            src="https://pa1.narvii.com/6233/df1f29949b34437fbafd41f3d3b11b4952215955_hq.gif"
+            alt="Minting loading indicator"
+          />
+        </div>
+      )}
     </div>
   );
 };

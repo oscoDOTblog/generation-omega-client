@@ -186,7 +186,7 @@ const App = () => {
         }
       } catch (error) {
         if (error.toString().includes("URI query for nonexistent token")){
-          console.log("URI query for nonexistent token");
+          console.log("CONTRACT ERROR: URI query for nonexistent token");
         }
         // console.log("Full Error: " + error.toString()); // DEBUG
       }
