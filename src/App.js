@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
-import { Buffer } from 'buffer';
 
 // Blockchain Imports 
 import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
@@ -188,22 +187,30 @@ const App = () => {
       );
 
       console.log(gameContract)
-      const characterRawData = (await gameContract.tokenURI(0))
-      console.log(characterRawData) // TODO
-      const characterBase64 = characterRawData.split(',')[1]
-      const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
-      console.log(characterJSON.attributes)
-      for (let i = 0; i < characterJSON.attributes.length; i++) {
-        let traitType = characterJSON.attributes[i]["trait_type"]
-        let traitValue = characterJSON.attributes[i]["value"]
-        let maxValue = characterJSON.attributes[i]["max_value"]
-        if (maxValue) {
-          console.log(traitType + ": " + traitValue + "/" + maxValue)
-        } else {
-          console.log(traitType + ": " + traitValue)
-        }
-        
-      }
+      const characterDataRaw = (await gameContract.tokenURI(0))
+      console.log(characterDataRaw) // TODO
+
+      if (characterDataRaw) {
+        console.log('User has character NFT');
+        setCharacterNFT(transformCharacterData(characterDataRaw));
+        console.log(characterNFT)
+      } else {
+        console.log('No character NFT found!');
+      }     
+      // const characterBase64 = characterRawData.split(',')[1]
+      // const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
+      // console.log(characterJSON.attributes)
+      // for (let i = 0; i < characterJSON.attributes.length; i++) {
+      //   let traitType = characterJSON.attributes[i]["trait_type"]
+      //   let traitValue = characterJSON.attributes[i]["value"]
+      //   let maxValue = characterJSON.attributes[i]["max_value"]
+      //   if (maxValue) {
+      //     console.log(traitType + ": " + traitValue + "/" + maxValue)
+      //   } else {
+      //     console.log(traitType + ": " + traitValue)
+      //   }
+      // }
+
       // await gameContract.ownerClaim(1)
       // console.log(await gameContract.tokenURI(0))
       // const txn = await gameContract.tokenURI('0xdc557453ab3f30b35d9a361337a05a2874e3ebab'); //  const txn = await gameContract.checkIfUserHasNFT();
