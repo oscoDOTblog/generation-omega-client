@@ -49,6 +49,7 @@ const MintCharacter = ({ setCharacterNFT }) => {
       /*
       * This is the big difference. Set our gameContract in state.
       */
+      console.log(gameContract);
       setGameContract(gameContract);
     } else {
       console.log('Ethereum object not found');
