@@ -8,7 +8,7 @@ import { ethers } from 'ethers';
 
 // Custom Components
 import MintCharacter from './components/MintCharacter';
-// import Home from './components/Home';
+import SelectCharacter from './components/SelectCharacter';
 import LoadingIndicator from './components/LoadingIndicator';
 
 
@@ -137,20 +137,20 @@ const App = () => {
     * Scenario #3: If there is a connected wallet and characterNFT, it's time to battle!
     */
     } else if (currentAccount && characterNFT) {
-      const skills = characterNFT.skills
-      return <div>
-        <p className="sub-text">You have minted your NFT! Here are its stats...</p>
-        <p className="sub-text">Strength: {characterNFT.strength}/{MAX_VALUE}</p>
-        <p className="sub-text">Dexterity: {characterNFT.dexterity}/{MAX_VALUE}</p>
-        <p className="sub-text">Constitution: {characterNFT.constitution}/{MAX_VALUE}</p>
-        <p className="sub-text">Intelligence: {characterNFT.intelligence}/{MAX_VALUE}</p>
-        <p className="sub-text">Wisdom: {characterNFT.wisdom}/{MAX_VALUE}</p>
-        <p className="sub-text">Charisma: {characterNFT.charisma}/{MAX_VALUE}</p>
-        {skills.map((skill,index) =>
-            <p key={index} className="sub-text">Skill: {skill} </p>
-        )}
-      </div>
-      // return <Arena characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
+      // const skills = characterNFT.skills
+      // return <div>
+      //   <p className="sub-text">You have minted your NFT! Here are its stats...</p>
+      //   <p className="sub-text">Strength: {characterNFT.strength}/{MAX_VALUE}</p>
+      //   <p className="sub-text">Dexterity: {characterNFT.dexterity}/{MAX_VALUE}</p>
+      //   <p className="sub-text">Constitution: {characterNFT.constitution}/{MAX_VALUE}</p>
+      //   <p className="sub-text">Intelligence: {characterNFT.intelligence}/{MAX_VALUE}</p>
+      //   <p className="sub-text">Wisdom: {characterNFT.wisdom}/{MAX_VALUE}</p>
+      //   <p className="sub-text">Charisma: {characterNFT.charisma}/{MAX_VALUE}</p>
+      //   {skills.map((skill,index) =>
+      //       <p key={index} className="sub-text">Skill: {skill} </p>
+      //   )}
+      // </div>
+      return <SelectCharacter characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
     }
   };
 
@@ -176,8 +176,7 @@ const App = () => {
 
       try {
         // console.log(gameContract) // DEBUG
-        const characterDataRaw = (await gameContract.tokenURI(45))
-        // console.log(characterDataRaw) // DEBUG
+        const characterDataRaw = (await gameContract.tokenURI(2))
         if (characterDataRaw) {
           console.log('User has character NFT');
           setCharacterNFT(transformCharacterData(characterDataRaw));

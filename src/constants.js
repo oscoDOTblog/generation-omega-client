@@ -6,8 +6,8 @@ const transformCharacterData = (characterDataRaw) => {
     const characterBase64 = characterDataRaw.split(',')[1]
     const characterJSON = JSON.parse(Buffer.from(characterBase64,'base64').toString())
     const characterAttributes = characterJSON.attributes
-    // console.log(characterAttributes) // DEBUG
     const characterData = {
+      name: characterJSON["name"] , 
       strength : characterAttributes[0]["value"],
       dexterity: characterAttributes[1]["value"],
       constitution: characterAttributes[2]["value"],
