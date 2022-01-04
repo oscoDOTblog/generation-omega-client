@@ -64,7 +64,7 @@ const MintCharacter = ({ setCharacterNFT }) => {
     */
     const onCharacterMint = async (sender, tokenId) => {
       console.log(
-        `CharacterNFTMinted - sender: ${sender} tokenId: ${tokenId.toNumber()}`
+        `CharacterNFTMinted - \n sender: ${sender} \n tokenId: ${tokenId.toNumber()}`
       );
 
       /*
@@ -72,7 +72,7 @@ const MintCharacter = ({ setCharacterNFT }) => {
       * and set it in state to move onto the Arena
       */
       if (gameContract) {
-        const characterNFT = await gameContract.checkIfUserHasNFT();
+        const characterNFT = await gameContract.tokenURI(tokenId);
         console.log('CharacterNFT: ', characterNFT);
         setCharacterNFT(transformCharacterData(characterNFT));
       }
