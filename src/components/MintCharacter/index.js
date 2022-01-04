@@ -22,7 +22,9 @@ const MintCharacter = ({ setCharacterNFT }) => {
       if (gameContract) {
         setMintingCharacter(true);
         console.log('Minting character in progress...');
-        const mintTxn = await gameContract.ownerClaim(1);
+        // TODO: Add Mint Quantity (Hardcode to 1)
+        // TODO: Get Mint Price from Public Func (Amend in Contract)
+        const mintTxn = await gameContract.buy(1, { value: ethers.utils.parseEther("0.02") });
         await mintTxn.wait();
         console.log('mintTxn:', mintTxn);
         setMintingCharacter(false);
@@ -56,24 +58,49 @@ const MintCharacter = ({ setCharacterNFT }) => {
     }
   }, []);
 
+  useEffect(() => {
+    /*
+    * Add a callback method that will fire when this event is received
+    */
+    const onCharacterMint = async (sender, tokenId) => {
+      console.log(
+        `CharacterNFTMinted - sender: ${sender} tokenId: ${tokenId.toNumber()}`
+      );
 
-  return (
-    <div className="select-character-container">
-      <h2>You take your first step into the unknown...</h2>
-      <img
-        src={mintThumb}
-        alt="Welcome to the Wasteland"
-      />
-      <br/>
-      <button
-        className="cta-button connect-wallet-button"
-        // onClick={() => console.log("heya")}
-        onClick={mintCharacterNFTAction()}
-      >
-        Realize Your Existence (Mint Character)
-      </button>
-      {/* Only show our loading state if mintingCharacter is true */}
-      {mintingCharacter && (
+      /*
+      * Once our character NFT is minted we can fetch the metadata from our contract
+      * and set it in state to move onto the Arena
+      */
+      if (gameContract) {
+        const characterNFT = await gameContract.checkIfUserHasNFT();
+        console.log('CharacterNFT: ', characterNFT);
+        setCharacterNFT(transformCharacterData(characterNFT));
+      }
+    };
+
+    /*
+     * Setup NFT Minted Listener
+     */
+    if (gameContract) {
+      gameContract.on('CharacterMinted', onCharacterMint);      
+    }
+
+    return () => {
+      /*
+       * When your component unmounts, let;s make sure to clean up this listener
+       */
+      if (gameContract) {
+        gameContract.off('CharacterMinted', onCharacterMint);
+      }
+    };
+  }, [gameContract, setCharacterNFT]);
+
+  const renderContent = () => {
+    /*
+    * Scenario #1: Minting Character
+    */
+    if (mintingCharacter) {
+      return (
         <div className="loading">
           <div className="indicator">
             <LoadingIndicator />
@@ -84,7 +111,34 @@ const MintCharacter = ({ setCharacterNFT }) => {
             alt="Minting loading indicator"
           />
         </div>
-      )}
+      );
+    /*
+    * Scenario #2: Not Minting Character
+    */
+    } else if (!mintingCharacter) {
+      return (
+        <div>
+          <img
+            src={mintThumb}
+            alt="Welcome to the Wasteland"
+          />
+          <br/>
+          <button
+            className="cta-button connect-wallet-button"
+            // onClick={() => console.log("heya")}
+            onClick={mintCharacterNFTAction()}
+          >
+            Realize Your Existence (Mint Character)
+          </button>
+        </div>
+      );
+    }
+  };
+
+  return (
+    <div className="select-character-container">
+      <h2>You take your first step into the unknown...</h2>
+      {renderContent()}
     </div>
   );
 };
