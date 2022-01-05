@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import './App.css';
 
 // Blockchain Imports 
-import { CONTRACT_ADDRESS, MAX_VALUE, transformCharacterData } from './constants';
+import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
 import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
 
@@ -21,6 +21,7 @@ const App = () => {
   // State
   const [isCorrectNetwork, setIsCorrectNetwork] = useState(null);
   const [currentAccount, setCurrentAccount] = useState(null);
+  const [characterList, setCharacterList] = useState([]);
   const [characterNFT, setCharacterNFT] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -128,30 +129,26 @@ const App = () => {
           </button>
         </div>
       );
+    }
     /*
     * Scenario #2: Connected Wallet but no Player NFT
     */
-    } else if (currentAccount && !characterNFT) {
+    else if (currentAccount && !characterNFT && characterList.length === 0) {
         return <MintCharacter setCharacterNFT={setCharacterNFT} />;
-    /*
-    * Scenario #3: If there is a connected wallet and characterNFT, it's time to battle!
-    */
-    } else if (currentAccount && characterNFT) {
-      // const skills = characterNFT.skills
-      // return <div>
-      //   <p className="sub-text">You have minted your NFT! Here are its stats...</p>
-      //   <p className="sub-text">Strength: {characterNFT.strength}/{MAX_VALUE}</p>
-      //   <p className="sub-text">Dexterity: {characterNFT.dexterity}/{MAX_VALUE}</p>
-      //   <p className="sub-text">Constitution: {characterNFT.constitution}/{MAX_VALUE}</p>
-      //   <p className="sub-text">Intelligence: {characterNFT.intelligence}/{MAX_VALUE}</p>
-      //   <p className="sub-text">Wisdom: {characterNFT.wisdom}/{MAX_VALUE}</p>
-      //   <p className="sub-text">Charisma: {characterNFT.charisma}/{MAX_VALUE}</p>
-      //   {skills.map((skill,index) =>
-      //       <p key={index} className="sub-text">Skill: {skill} </p>
-      //   )}
-      // </div>
-      return <SelectCharacter characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
     }
+    /*
+    * Scenario #3: If there is a connected wallet and list of characters and NO selected charaters,
+    * show your list of characters to select!
+    */
+    else if (currentAccount && !characterNFT && characterList.length > 1) {
+      return <SelectCharacter characterList={characterList} setCharacterNFT={setCharacterNFT}  />;
+    }
+    /*
+    * Scenario #4: If there is a connected wallet and selected characterNFT, it's time to battle!
+    */
+    // else if (currentAccount && characterNFT) {
+    //     return <SelectCharacter characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
+    // }
   };
 
   useEffect(() => {
@@ -175,14 +172,23 @@ const App = () => {
       );
 
       try {
-        // console.log(gameContract) // DEBUG
-        const characterDataRaw = (await gameContract.tokenURI(2))
-        if (characterDataRaw) {
-          console.log('User has character NFT');
-          setCharacterNFT(transformCharacterData(characterDataRaw));
-        } else {
-          console.log('No character NFT found!');
+        const remainingTokens = await gameContract.remainingTokens()
+        const mintedSoFar = 5000 - remainingTokens.toNumber()
+        const accountNFTs = []
+        for (let i = 0; i < mintedSoFar; i++) {
+          // const ownerAddress = transformOwnerData(await gameContract.ownerClaim(i))
+          // if ( currentAccount === ownerAddress){
+            const characterDataRaw = (await gameContract.tokenURI(i))
+            if (characterDataRaw) {
+              console.log('User has Character NFT #' + i);
+              const characterData = transformCharacterData(characterDataRaw)
+              accountNFTs.push(characterData)
+            } else {
+              console.log('No character NFT found!');
+            }       
+          // }
         }
+        setCharacterList(accountNFTs);
       } catch (error) {
         if (error.toString().includes("URI query for nonexistent token")){
           console.log("CONTRACT ERROR: URI query for nonexistent token");
