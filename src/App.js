@@ -7,9 +7,12 @@ import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
 
 // Custom Components
+import ExploreWasteland from './components/ExploreWasteland';
+import LoadingIndicator from './components/LoadingIndicator';
+import Navbar from './components/Navbar';
 import MintCharacter from './components/MintCharacter';
 import SelectCharacter from './components/SelectCharacter';
-import LoadingIndicator from './components/LoadingIndicator';
+
 
 
 // Constants
@@ -23,6 +26,7 @@ const App = () => {
   const [currentAccount, setCurrentAccount] = useState(null);
   const [characterList, setCharacterList] = useState([]);
   const [characterNFT, setCharacterNFT] = useState(null);
+  const [location, setLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const checkIfWalletIsConnected = async () => {
@@ -96,6 +100,7 @@ const App = () => {
 
   // Render Methods
   const renderContent = () => {
+    console.log("Location:" + location);
     if (isLoading) {
       return <LoadingIndicator />;
     }  
@@ -133,22 +138,22 @@ const App = () => {
     /*
     * Scenario #2: Connected Wallet but no Player NFT
     */
-    else if (currentAccount && !characterNFT && characterList.length === 0) {
+    else if (location === "MintCharacter") {
         return <MintCharacter setCharacterNFT={setCharacterNFT} />;
     }
     /*
     * Scenario #3: If there is a connected wallet and list of characters and NO selected charaters,
     * show your list of characters to select!
     */
-    else if (currentAccount && !characterNFT && characterList.length > 1) {
-      return <SelectCharacter characterList={characterList} setCharacterNFT={setCharacterNFT}  />;
+    else if (location === "SelectCharacter") {
+      return <SelectCharacter characterList={characterList} setCharacterNFT={setCharacterNFT} setLocation={setLocation}  />;
     }
     /*
     * Scenario #4: If there is a connected wallet and selected characterNFT, it's time to battle!
     */
-    // else if (currentAccount && characterNFT) {
-    //     return <SelectCharacter characterNFT={characterNFT} setCharacterNFT={setCharacterNFT}  />;
-    // }
+    else if (location === "ExploreWasteland") {
+        return <ExploreWasteland characterNFT={characterNFT} />;
+    }
   };
 
   useEffect(() => {
@@ -189,6 +194,12 @@ const App = () => {
           // }
         }
         setCharacterList(accountNFTs);
+        if (accountNFTs.length > 0){
+          setLocation("SelectCharacter")
+        }
+        else {
+          setLocation("MintCharacter")
+        }
       } catch (error) {
         if (error.toString().includes("URI query for nonexistent token")){
           console.log("CONTRACT ERROR: URI query for nonexistent token");
@@ -205,10 +216,11 @@ const App = () => {
       console.log('CurrentAccount:', currentAccount);
       fetchNFTMetadata();
     }
-  }, [currentAccount]);
+  }, [currentAccount, ]);
 
   return (
     <div className="App">
+      <Navbar setLocation={setLocation}/>
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">Generation Omega</p>

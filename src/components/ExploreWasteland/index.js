@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import './ExploreWasteland.css';
 
-const Wasteland = () => {
-  const [stageNumber, setStageNumber] = useState(null);
+
+const ExploreWasteland = ({characterNFT}) => {
+  const [stageNumber, setStageNumber] = useState(1);
 
   /*
   * Get Current Stage Number
@@ -33,8 +35,9 @@ const Wasteland = () => {
     */
     if (stageNumber === 1) {
       return (
-        <div>
-          Stage 1
+        <div className="select-character-container">
+          <h2>Stage 1</h2>
+          <h3>{'Welcome to the Wasteland, ' + characterNFT.name}</h3>
         </div>
       );
     /*
@@ -56,4 +59,4 @@ const Wasteland = () => {
   )
 }
 
-export default Wasteland
+export default ExploreWasteland

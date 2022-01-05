@@ -6,7 +6,7 @@ import './SelectCharacter.css';
 /*
  * We pass in our characterNFT metadata so we can a cool card in our UI
  */
-const SelectCharacter = ({ characterList, setCharacterNFT }) => {
+const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
   // State
   // TODO: Add Attack, HP, and MaxHP to Contract
   // characterNFT['hp'] = 10
@@ -29,14 +29,20 @@ const SelectCharacter = ({ characterList, setCharacterNFT }) => {
 //         </div>
 //       )
 //   }
+  
+  const beginYourJourney = (characterNFT) => {
+    console.log(characterNFT);
+    setLocation("ExploreWasteland")
+    setCharacterNFT(characterNFT)
+  }
 
   return (
     <div className="arena-container">
+      <h2>Select Your Character</h2>
       {/* Character NFT */}
       {characterList.map((characterNFT, i) => (
         <div key={i} className="players-container">
         <div className="player-container">
-          <h2>Your Character</h2>
           <div className="player">
             <div className="image-content">
               <h2>{characterNFT.name}</h2>
@@ -63,6 +69,13 @@ const SelectCharacter = ({ characterList, setCharacterNFT }) => {
                 <h5 key={i}>{`🎾 Skill ${i}: ${characterSkill}`}</h5>
               ))}
             </div>
+            <button
+            className="cta-button connect-wallet-button"
+            onClick={() => beginYourJourney(characterNFT)}
+            // onClick={() => setLocation("ExploreWasteland")}
+          >
+            Begin Your Journey
+          </button>
           </div>
         </div>
       </div>
