@@ -38,6 +38,20 @@ const App = () => {
         return;
       } else {
         console.log('We have the ethereum object', ethereum);
+
+        /*
+         * Check if we are on the correct network verison
+         */
+        const networkVersion = await ethereum.request({ method: 'eth_chainId' });
+        if (networkVersion === '0x4') {
+          console.log('Client connected to CORRECT Network Version: ' + networkVersion);
+          setIsCorrectNetwork(true);
+        } else {
+          console.log('Client connected to INCORRECT Network Version: ' + networkVersion);
+          setIsCorrectNetwork(false);
+          setIsLoading(false);
+        }
+
         /*
          * Check if we're authorized to access the user's wallet
          */
@@ -52,19 +66,7 @@ const App = () => {
           setCurrentAccount(account);
         } else {
           console.log('No authorized account found');
-        }
-
-
-        /*
-         * Check if we are on the correct network verison
-         */
-        const networkVersion = await ethereum.request({ method: 'eth_chainId' });
-        if (networkVersion === '0x4') {
-          console.log('Client connected to CORRECT Network Version: ' + networkVersion);
-          setIsCorrectNetwork(true);
-        } else {
-          console.log('Client connected to INCORRECT Network Version: ' + networkVersion);
-          setIsCorrectNetwork(false);
+          setIsLoading(false);
         }
       }
     } catch (error) {
@@ -206,7 +208,7 @@ const App = () => {
         }
         // console.log("Full Error: " + error.toString()); // DEBUG
       }
-       setIsLoading(false);
+      setIsLoading(false);
     };
 
     /*
