@@ -101,15 +101,17 @@ const MintCharacter = ({ setCharacterNFT }) => {
     */
     if (mintingCharacter) {
       return (
-        <div className="loading">
-          <div className="indicator">
-            <LoadingIndicator />
-            <p>Minting In Progress...</p>
+        <div className="select-character-container">
+          <div className="loading">
+            <div className="indicator">
+              <LoadingIndicator />
+              <p>Minting In Progress...</p>
+            </div>
+            <img
+              src="https://pa1.narvii.com/6233/df1f29949b34437fbafd41f3d3b11b4952215955_hq.gif"
+              alt="Minting loading indicator"
+            />
           </div>
-          <img
-            src="https://pa1.narvii.com/6233/df1f29949b34437fbafd41f3d3b11b4952215955_hq.gif"
-            alt="Minting loading indicator"
-          />
         </div>
       );
     /*
@@ -118,10 +120,12 @@ const MintCharacter = ({ setCharacterNFT }) => {
     } else if (!mintingCharacter) {
       return (
         <div>
+          <h2>You take your first step into the unknown...</h2>
           <img
             src={mintThumb}
             alt="Welcome to the Wasteland"
           />
+          <br/>
           <br/>
           <button
             className="cta-button connect-wallet-button"
@@ -137,7 +141,6 @@ const MintCharacter = ({ setCharacterNFT }) => {
 
   return (
     <div className="select-character-container">
-      <h2>You take your first step into the unknown...</h2>
       {renderContent()}
     </div>
   );

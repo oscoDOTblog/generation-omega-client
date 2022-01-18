@@ -113,7 +113,7 @@ const App = () => {
     if (!isCorrectNetwork) {
       return (
         <div className="select-character-container">
-          <h2>You are on the wrong network! Please connect to Rinkeby to continue.</h2>
+          <h2>You are on the wrong network! Please connect to Rinkeby and refresh to continue.</h2>
         </div>
       );
     }
