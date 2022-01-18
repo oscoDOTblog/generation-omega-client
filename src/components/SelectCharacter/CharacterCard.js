@@ -30,33 +30,43 @@ const CharacterCard = ({characterNFT}) => {
                 {/* <progress value={characterNFT.hp} max={characterNFT.maxHp} /> */}
                 <progress value={10} max={20} />
                 {/* <p>{`${characterNFT.hp} / ${characterNFT.maxHp} HP`}</p> */}
-                <p>{`${10} / ${20} HP`}</p>
+                <p>{`HP: ${10} / ${20}`}</p>
               </div>
             </div>
             <div className="stats">
             <Grid container spacing={3}>
-              <Grid item >
-                <h4>{`💪 Strength: ${characterNFT.strength}/${MAX_VALUE}`}</h4>
+              <Grid item>
+                <h5>{`💪 Strength: ${characterNFT.strength}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.strength, MAX_VALUE)} />
-                <h4>{`🙌 Dexterity: ${characterNFT.dexterity}/${MAX_VALUE}`}</h4>
+                <h5>{`🙌 Dexterity: ${characterNFT.dexterity}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.dexterity, MAX_VALUE)} />
-                <h4>{`❤️ Constitution: ${characterNFT.constitution}/${MAX_VALUE}`}</h4>
+                <h5>{`❤️ Constitution: ${characterNFT.constitution}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.constitution, MAX_VALUE)} />
               </Grid>
               <Grid item>
-                <h4>{`🧠 Intelligence: ${characterNFT.intelligence}/${MAX_VALUE}`}</h4>
+                <h5>{`🧠 Intelligence: ${characterNFT.intelligence}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.intelligence, MAX_VALUE)} />
-                <h4>{`💭 Wisdom: ${characterNFT.wisdom}/${MAX_VALUE}`}</h4>
+                <h5>{`💭 Wisdom: ${characterNFT.wisdom}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.wisdom, MAX_VALUE)} />
-                <h4>{`✨ Charisma: ${characterNFT.charisma}/${MAX_VALUE}`}</h4>
+                <h5>{`✨ Charisma: ${characterNFT.charisma}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.charisma, MAX_VALUE)} />
               </Grid>
             </Grid>
-            <Grid item >
+            <Grid container spacing={3}>
+            <Grid item xs={12} sm={6}>
+            <h4><i>Skills</i></h4>
               {characterNFT.skills.map((characterSkill, i) => (
-                <h5 key={i}>{`🎾 Skill ${i}: ${characterSkill}`}</h5>
+                <h5 key={i}>{`🎾 ${characterSkill}`}</h5>
               ))}
             </Grid>
+            <Grid item xs={12} sm={6}>
+            <h4><i>Inventory</i></h4>
+              {/* {characterNFT.skills.map((characterSkill, i) => ( */}
+                <h5>{`[Empty]`}</h5>
+               {/* ))} */}
+            </Grid>
+            </Grid>
+
             </div>
           </div>
         </div>
