@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from '@material-ui/core/Grid';
 import CharacterCard from './CharacterCard';
 
 // import LoadingIndicator from '../LoadingIndicator';
@@ -40,18 +41,19 @@ const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
     <div className="arena-container">
       <h2>Select Your Character</h2>
       {/* Character NFT */}
-      {characterList.map((characterNFT, i) => (
-        <div key={i}>
+      <Grid container justifycontent="center" spacing={4}>
+        {characterList.map((characterNFT, i) => (
+          <Grid key={i} item xs={12} sm={6} md={4} lg={3}>
           <CharacterCard characterNFT={characterNFT}/>
           <button
             className="cta-button connect-wallet-button"
             onClick={() => beginYourJourney(characterNFT)}
-            >
+          >
             Begin Your Journey
           </button>
-          <br/><br/>
-        </div>
-    ))}
+          </Grid>
+        ))}
+      </Grid>
     </div>
   );
 };
