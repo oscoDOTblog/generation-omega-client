@@ -34,20 +34,20 @@ const App = () => {
       const { ethereum } = window;
 
       if (!ethereum) {
-        console.log('Make sure you have MetaMask!');
+        console.log('Make sure you have MetaMask!'); // DEBUG
         return;
       } else {
-        console.log('We have the ethereum object', ethereum);
+        // console.log('We have the ethereum object', ethereum); // DEBUG
 
         /*
          * Check if we are on the correct network verison
          */
         const networkVersion = await ethereum.request({ method: 'eth_chainId' });
         if (networkVersion === '0x4') {
-          console.log('Client connected to CORRECT Network Version: ' + networkVersion);
+          // console.log('Client connected to CORRECT Network Version: ' + networkVersion); // DEBUG
           setIsCorrectNetwork(true);
         } else {
-          console.log('Client connected to INCORRECT Network Version: ' + networkVersion);
+          // console.log('Client connected to INCORRECT Network Version: ' + networkVersion); // DEBUG
           setIsCorrectNetwork(false);
           setIsLoading(false);
         }
@@ -62,10 +62,10 @@ const App = () => {
          */
         if (accounts.length !== 0) {
           const account = accounts[0];
-          console.log('Found an authorized account:', account);
+          // console.log('Found an authorized account:', account); // DEBUG
           setCurrentAccount(account);
         } else {
-          console.log('No authorized account found');
+          // console.log('No authorized account found'); // DEBUG
           setIsLoading(false);
         }
       }
@@ -102,7 +102,7 @@ const App = () => {
 
   // Render Methods
   const renderContent = () => {
-    console.log("Location:" + location);
+    // console.log("Location:" + location); // DEBUG
     if (isLoading) {
       return <LoadingIndicator />;
     }  
@@ -124,6 +124,7 @@ const App = () => {
     else if (!currentAccount) {
       return (
         <div className="connect-wallet-container">
+          <p className="sub-text">Can you survive in this post-apocalyptic world?</p>
           <img
             src="http://pa1.narvii.com/6335/113796f7ded0f179eee7ea4ae68db23ca97412ce_hq.gif"
             alt="Sword Art Online Gif"
@@ -168,8 +169,7 @@ const App = () => {
     * The function we will call that interacts with out smart contract
     */
     const fetchNFTMetadata = async () => {
-      console.log('Checking for Character NFT on address:', currentAccount);
-
+      // console.log('Checking for Character NFT on address:', currentAccount); // DEBUG
       const provider = new ethers.providers.Web3Provider(window.ethereum);
       const signer = provider.getSigner();
       const gameContract = new ethers.Contract(
@@ -182,19 +182,35 @@ const App = () => {
         const remainingTokens = await gameContract.remainingTokens()
         const mintedSoFar = 5000 - remainingTokens.toNumber()
         const accountNFTs = []
-        for (let i = 0; i < mintedSoFar; i++) {
-          // const ownerAddress = transformOwnerData(await gameContract.ownerClaim(i))
-          // if ( currentAccount === ownerAddress){
-            const characterDataRaw = (await gameContract.tokenURI(i))
-            if (characterDataRaw) {
-              console.log('User has Character NFT #' + i);
-              const characterData = transformCharacterData(characterDataRaw)
-              accountNFTs.push(characterData)
-            } else {
-              console.log('No character NFT found!');
-            }       
-          // }
+
+        // TEST STUFF
+        const balance = await gameContract.balanceOf(currentAccount)
+        for (let i = 0; i < balance; i++) {
+          const nftIndex = await gameContract.tokenOfOwnerByIndex(currentAccount, i)
+          const characterDataRaw = (await gameContract.tokenURI(nftIndex))
+          if (characterDataRaw) {
+            // console.log('User has Character NFT #' + nftIndex); // DEBUG
+            const characterData = transformCharacterData(characterDataRaw)
+            accountNFTs.push(characterData)
+          } else {
+            // console.log('No character NFT found!'); // DEBUG
+          }  
         }
+
+        // Looper
+        // for (let i = 0; i < mintedSoFar; i++) {
+        //   // const ownerAddress = await gameContract.ownerClaim(i)
+        //   // if ( currentAccount === ownerAddress){
+        //     const characterDataRaw = (await gameContract.tokenURI(i))
+        //     if (characterDataRaw) {
+        //       console.log('User has Character NFT #' + i);
+        //       const characterData = transformCharacterData(characterDataRaw)
+        //       accountNFTs.push(characterData)
+        //     } else {
+        //       console.log('No character NFT found!');
+        //     }       
+        //   // }
+        // }
         setCharacterList(accountNFTs);
         if (accountNFTs.length > 0){
           setLocation("SelectCharacter")
@@ -206,7 +222,7 @@ const App = () => {
         if (error.toString().includes("URI query for nonexistent token")){
           console.log("CONTRACT ERROR: URI query for nonexistent token");
         }
-        // console.log("Full Error: " + error.toString()); // DEBUG
+        console.log("Full Error: " + error.toString()); // DEBUG
       }
       setIsLoading(false);
     };
@@ -215,7 +231,7 @@ const App = () => {
     * We only want to run this, if we have a connected wallet
     */
     if (currentAccount) {
-      console.log('CurrentAccount:', currentAccount);
+      // console.log('CurrentAccount:', currentAccount); // DEBUG
       fetchNFTMetadata();
     }
   }, [currentAccount, ]);
@@ -226,9 +242,9 @@ const App = () => {
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">Generation Omega</p>
-          <p className="sub-text">Can you survive in this post-apocalyptic world?</p>
           {renderContent()}
         </div>
+        <br/>
         <div className="footer-container">
           <img alt="Twitter Logo" className="twitter-logo" src={twitterLogo} />
           <a

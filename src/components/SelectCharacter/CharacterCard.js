@@ -23,7 +23,7 @@ const CharacterCard = ({characterNFT}) => {
               <h2>{characterNFT.name}</h2>
               <img
                 // src={characterNFT.imageURI}
-                src="https://pa1.narvii.com/6233/df1f29949b34437fbafd41f3d3b11b4952215955_hq.gif"
+                src="https://i.pinimg.com/736x/17/87/54/1787542aeb3e3bee51a4057eca4de97e.jpg"
                 alt={`Character ${characterNFT.name}`}
               />
               <div className="health-bar">
@@ -35,7 +35,7 @@ const CharacterCard = ({characterNFT}) => {
             </div>
             <div className="stats">
             <Grid container spacing={3}>
-              <Grid item>
+              <Grid item xs={12} sm={6}>
                 <h5>{`💪 Strength: ${characterNFT.strength}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.strength, MAX_VALUE)} />
                 <h5>{`🙌 Dexterity: ${characterNFT.dexterity}/${MAX_VALUE}`}</h5>
@@ -43,7 +43,7 @@ const CharacterCard = ({characterNFT}) => {
                 <h5>{`❤️ Constitution: ${characterNFT.constitution}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.constitution, MAX_VALUE)} />
               </Grid>
-              <Grid item>
+              <Grid item xs={12} sm={6}>
                 <h5>{`🧠 Intelligence: ${characterNFT.intelligence}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.intelligence, MAX_VALUE)} />
                 <h5>{`💭 Wisdom: ${characterNFT.wisdom}/${MAX_VALUE}`}</h5>
