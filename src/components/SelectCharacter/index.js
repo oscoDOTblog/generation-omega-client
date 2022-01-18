@@ -30,11 +30,11 @@ const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
 //       )
 //   }
   
-  // const beginYourJourney = (characterNFT) => {
-  //   console.log(characterNFT);
-  //   setLocation("ExploreWasteland")
-  //   setCharacterNFT(characterNFT)
-  // }
+  const beginYourJourney = (characterNFT) => {
+    console.log(characterNFT);
+    setLocation("ExploreWasteland")
+    setCharacterNFT(characterNFT)
+  }
 
   return (
     <div className="arena-container">
@@ -43,6 +43,13 @@ const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
       {characterList.map((characterNFT, i) => (
         <div key={i}>
           <CharacterCard characterNFT={characterNFT}/>
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={() => beginYourJourney(characterNFT)}
+            >
+            Begin Your Journey
+          </button>
+          <br/><br/>
         </div>
     ))}
     </div>

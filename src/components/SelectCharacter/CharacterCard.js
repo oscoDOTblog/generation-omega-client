@@ -33,12 +33,6 @@ const CharacterCard = ({characterNFT}) => {
                   <h5 key={i}>{`🎾 Skill ${i}: ${characterSkill}`}</h5>
                 ))}
               </div>
-              <button
-              className="cta-button connect-wallet-button"
-              // onClick={() => beginYourJourney(characterNFT)}
-            >
-              Begin Your Journey
-            </button>
             </div>
           </div>
         </div>        

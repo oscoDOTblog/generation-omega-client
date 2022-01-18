@@ -141,7 +141,7 @@ const App = () => {
     * Scenario #2: Connected Wallet but no Player NFT
     */
     else if (location === "MintCharacter") {
-        return <MintCharacter setCharacterNFT={setCharacterNFT} />;
+        return <MintCharacter setLocation={setLocation} />;
     }
     /*
     * Scenario #3: If there is a connected wallet and list of characters and NO selected charaters,
@@ -154,7 +154,7 @@ const App = () => {
     * Scenario #4: If there is a connected wallet and selected characterNFT, it's time to battle!
     */
     else if (location === "ExploreWasteland") {
-        return <ExploreWasteland characterNFT={characterNFT} />;
+        return <ExploreWasteland characterNFT={characterNFT} setLocation={setLocation} />;
     }
   };
 

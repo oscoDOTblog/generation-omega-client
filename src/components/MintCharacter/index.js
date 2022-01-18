@@ -5,15 +5,18 @@ import { CONTRACT_ADDRESS, transformCharacterData } from '../../constants';
 import generationOmega from '../../utils/GenerationOmega.json';
 import LoadingIndicator from '../LoadingIndicator';
 import mintThumb from '../../assets/post2.png';
-
+import CharacterCard from '../SelectCharacter/CharacterCard';
 
 /*
  * Don't worry about setCharacterNFT just yet, we will talk about it soon!
  */
-const MintCharacter = ({ setCharacterNFT }) => {
+const MintCharacter = ({ setLocation }) => {
   // State
+  // const characterNFT
   const [gameContract, setGameContract] = useState(null);
   const [mintingCharacter, setMintingCharacter] = useState(false);
+  const [mintedCharacter, setMintedCharacter] = useState(null);
+
 
   // Actions
   const mintCharacterNFTAction = () => async () => {
@@ -74,7 +77,7 @@ const MintCharacter = ({ setCharacterNFT }) => {
       if (gameContract) {
         const characterNFT = await gameContract.tokenURI(tokenId);
         console.log('CharacterNFT: ', characterNFT);
-        setCharacterNFT(transformCharacterData(characterNFT));
+        setMintedCharacter(transformCharacterData(characterNFT));
       }
     };
 
@@ -93,7 +96,7 @@ const MintCharacter = ({ setCharacterNFT }) => {
         gameContract.off('CharacterMinted', onCharacterMint);
       }
     };
-  }, [gameContract, setCharacterNFT]);
+  }, [gameContract, setMintedCharacter]);
 
   const renderContent = () => {
     /*
@@ -115,9 +118,9 @@ const MintCharacter = ({ setCharacterNFT }) => {
         </div>
       );
     /*
-    * Scenario #2: Not Minting Character
+    * Scenario #2: Not Minting Character and Have Not Minted Yet
     */
-    } else if (!mintingCharacter) {
+    } else if (!mintingCharacter && !mintedCharacter) {
       return (
         <div>
           <h2>You take your first step into the unknown...</h2>
@@ -133,6 +136,26 @@ const MintCharacter = ({ setCharacterNFT }) => {
             onClick={mintCharacterNFTAction()}
           >
             Realize Your Existence (Mint Character)
+          </button>
+        </div>
+      );
+    /*
+    * Scenario #3: Not Minting Character and Have Already Minted Character
+    */
+    } else if (!mintingCharacter && mintedCharacter) {
+      console.log( mintedCharacter )
+      return (
+        <div>
+          <h2>Welcome to the Wasteland, {mintedCharacter.name}</h2>
+          <CharacterCard characterNFT={mintedCharacter}/>
+          <br/>
+          <br/>
+          <button
+            className="cta-button connect-wallet-button"
+            // onClick={() => console.log("heya")}
+            onClick={() => setLocation("SelectCharacter")}
+          >
+            Enter the Wasteland
           </button>
         </div>
       );
