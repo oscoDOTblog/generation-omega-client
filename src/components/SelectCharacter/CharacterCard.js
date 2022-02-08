@@ -1,12 +1,13 @@
 // React Imports
 import React from 'react'
+import Link from '@material-ui/core/Link';
 
 // External Imports
 import Grid from '@material-ui/core/Grid';
 import LinearProgress from '@material-ui/core/LinearProgress';
 
 // Internal Imports
-import { MAX_VALUE } from '../../constants';
+import { CONTRACT_ADDRESS, MAX_VALUE } from '../../constants';
 import './SelectCharacter.css';
 
 const statRatiotoMax = (baseValue, maxValue) => {
@@ -77,12 +78,19 @@ const CharacterCard = ({characterNFT, setCharacterNFT, setLocation }) => {
             
             </Grid>
             <br/>
-          <button
+            {/* <Link to="/signup" className="btn btn-primary">Sign up</Link> */}
+            <Link href={`https://testnets.opensea.io/assets/${CONTRACT_ADDRESS}/${characterNFT.index}`} 
+              color="inherit" 
+              className="cta-button connect-wallet-button"
+            >
+              View on OpenSea
+            </Link>
+          {/* <button
             className="cta-button connect-wallet-button"
             onClick={() => console.log("Hii")}
           >
             View on OpenSea
-          </button>
+          </button> */}
           <br/>
           <br/>
           <button

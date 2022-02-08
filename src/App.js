@@ -191,7 +191,7 @@ const App = () => {
           console.log( characterDataRaw );
           if (characterDataRaw) {
             // console.log('User has Character NFT #' + nftIndex); // DEBUG
-            const characterData = transformCharacterData(characterDataRaw)
+            const characterData = transformCharacterData(characterDataRaw, nftIndex)
             accountNFTs.push(characterData)
           } else {
             // console.log('No character NFT found!'); // DEBUG
