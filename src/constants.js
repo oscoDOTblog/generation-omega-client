@@ -1,5 +1,5 @@
 import { Buffer } from 'buffer';
-const CONTRACT_ADDRESS = '0x6262A21f71E291Ff1e318062904e638ef75C7F62';
+const CONTRACT_ADDRESS = '0xC063C9f3D9a8aEE4f3CE8Bc305E60bCa0B62A448';
 const MAX_VALUE = '7';
 
 const transformCharacterData = (characterDataRaw) => {

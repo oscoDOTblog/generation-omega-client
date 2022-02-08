@@ -179,8 +179,8 @@ const App = () => {
       );
 
       try {
-        const remainingTokens = await gameContract.remainingTokens()
-        const mintedSoFar = 5000 - remainingTokens.toNumber()
+        // const remainingTokens = await gameContract.remainingTokens()
+        // const mintedSoFar = 5000 - remainingTokens.toNumber()
         const accountNFTs = []
 
         // TEST STUFF
@@ -188,6 +188,7 @@ const App = () => {
         for (let i = 0; i < balance; i++) {
           const nftIndex = await gameContract.tokenOfOwnerByIndex(currentAccount, i)
           const characterDataRaw = (await gameContract.tokenURI(nftIndex))
+          console.log( characterDataRaw );
           if (characterDataRaw) {
             // console.log('User has Character NFT #' + nftIndex); // DEBUG
             const characterData = transformCharacterData(characterDataRaw)

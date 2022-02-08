@@ -31,11 +31,11 @@ const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
 //       )
 //   }
   
-  const beginYourJourney = (characterNFT) => {
-    console.log(characterNFT);
-    setLocation("ExploreWasteland")
-    setCharacterNFT(characterNFT)
-  }
+  // const beginYourJourney = (characterNFT) => {
+  //   console.log(characterNFT);
+  //   setLocation("ExploreWasteland")
+  //   setCharacterNFT(characterNFT)
+  // }
 
   return (
     <div className="arena-container">
@@ -44,13 +44,22 @@ const SelectCharacter = ({ characterList, setCharacterNFT, setLocation }) => {
       <Grid container justifycontent="center" spacing={4}>
         {characterList.map((characterNFT, i) => (
           <Grid key={i} item xs={12} sm={6} md={4} lg={3}>
-          <CharacterCard characterNFT={characterNFT}/>
+          <CharacterCard characterNFT={characterNFT} setCharacterNFT={setCharacterNFT} setLocation={setLocation} />
+          {/* <br/>
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={() => beginYourJourney(characterNFT)}
+          >
+            View on OpenSea
+          </button> */}
+          {/* <br/>
+          <br/>
           <button
             className="cta-button connect-wallet-button"
             onClick={() => beginYourJourney(characterNFT)}
           >
             Begin Your Journey
-          </button>
+          </button> */}
           </Grid>
         ))}
       </Grid>

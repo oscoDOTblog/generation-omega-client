@@ -14,7 +14,16 @@ const statRatiotoMax = (baseValue, maxValue) => {
   return statRatio
 }
 
-const CharacterCard = ({characterNFT}) => {
+
+
+const CharacterCard = ({characterNFT, setCharacterNFT, setLocation }) => {
+
+  const beginYourJourney = (characterNFT) => {
+    console.log(characterNFT);
+    setLocation("ExploreWasteland")
+    setCharacterNFT(characterNFT)
+  }
+
     return (
       <div >
         <div className="players-container">
@@ -36,19 +45,19 @@ const CharacterCard = ({characterNFT}) => {
             <div className="stats">
             <Grid container spacing={3}>
               <Grid item xs={12} sm={6}>
-                <h5>{`💪 Strength: ${characterNFT.strength}/${MAX_VALUE}`}</h5>
+                <h5>{`💪 STR: ${characterNFT.strength}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.strength, MAX_VALUE)} />
-                <h5>{`🙌 Dexterity: ${characterNFT.dexterity}/${MAX_VALUE}`}</h5>
+                <h5>{`🙌 DEX: ${characterNFT.dexterity}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.dexterity, MAX_VALUE)} />
-                <h5>{`❤️ Constitution: ${characterNFT.constitution}/${MAX_VALUE}`}</h5>
+                <h5>{`❤️ CON: ${characterNFT.constitution}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.constitution, MAX_VALUE)} />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <h5>{`🧠 Intelligence: ${characterNFT.intelligence}/${MAX_VALUE}`}</h5>
+                <h5>{`🧠 INT: ${characterNFT.intelligence}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.intelligence, MAX_VALUE)} />
-                <h5>{`💭 Wisdom: ${characterNFT.wisdom}/${MAX_VALUE}`}</h5>
+                <h5>{`💭 WIS: ${characterNFT.wisdom}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.wisdom, MAX_VALUE)} />
-                <h5>{`✨ Charisma: ${characterNFT.charisma}/${MAX_VALUE}`}</h5>
+                <h5>{`✨ CHA: ${characterNFT.charisma}/${MAX_VALUE}`}</h5>
                 <LinearProgress variant="determinate" value={statRatiotoMax(characterNFT.charisma, MAX_VALUE)} />
               </Grid>
             </Grid>
@@ -65,8 +74,23 @@ const CharacterCard = ({characterNFT}) => {
                 <h5>{`[Empty]`}</h5>
                {/* ))} */}
             </Grid>
+            
             </Grid>
-
+            <br/>
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={() => console.log("Hii")}
+          >
+            View on OpenSea
+          </button>
+          <br/>
+          <br/>
+          <button
+            className="cta-button connect-wallet-button"
+            onClick={() => beginYourJourney(characterNFT)}
+          >
+            Begin Your Journey
+          </button>
             </div>
           </div>
         </div>
