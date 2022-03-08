@@ -5,6 +5,7 @@ import './App.css';
 import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
 import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
+import { networks } from './utils/networks';
 
 // Custom Components
 import ExploreWasteland from './components/ExploreWasteland';
@@ -13,10 +14,10 @@ import Navbar from './components/Navbar';
 import MintCharacter from './components/MintCharacter';
 import SelectCharacter from './components/SelectCharacter';
 
-
-
 // Constants
 import twitterLogo from './assets/twitter-logo.svg';
+import polygonLogo from './assets/polygonlogo.png';
+import ethLogo from './assets/ethlogo.png';
 const TWITTER_HANDLE = 'GenerationOmega';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
@@ -28,6 +29,47 @@ const App = () => {
   const [characterNFT, setCharacterNFT] = useState(null);
   const [location, setLocation] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+
+	const switchNetwork = async () => {
+		if (window.ethereum) {
+			try {
+				// Try to switch to the Mumbai testnet
+				await window.ethereum.request({
+					method: 'wallet_switchEthereumChain',
+					params: [{ chainId: '0x4' }], // Check networks.js for hexadecimal network ids
+				});
+			} catch (error) {
+				// This error code means that the chain we want has not been added to MetaMask
+				// In this case we ask the user to add it to their MetaMask
+				if (error.code === 4902) {
+					try {
+						await window.ethereum.request({
+							method: 'wallet_addEthereumChain',
+							params: [
+								{	
+									chainId: '0x4',
+									chainName: 'Rinkeby Test Network',
+									rpcUrls: ['https://rinkeby.infura.io/v3/9aa3d95b3bc440fa88ea12eaa4456161'],
+									nativeCurrency: {
+											name: "Rinkeby Ethereum",
+											symbol: "ETH",
+											decimals: 18
+									},
+									blockExplorerUrls: ["https://rinkeby.etherscan.io/"]
+								},
+							],
+						});
+					} catch (error) {
+						console.log(error);
+					}
+				}
+				console.log(error);
+			}
+		} else {
+			// If window.ethereum is not found then MetaMask is not installed
+			alert('MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html');
+		} 
+	}
 
   const checkIfWalletIsConnected = async () => {
     try {
@@ -50,6 +92,13 @@ const App = () => {
           // console.log('Client connected to INCORRECT Network Version: ' + networkVersion); // DEBUG
           setIsCorrectNetwork(false);
           setIsLoading(false);
+        }
+
+        ethereum.on('chainChanged', handleChainChanged);
+
+        // Reload the page when they change networks
+        function handleChainChanged(_chainId) {
+          window.location.reload();
         }
 
         /*
@@ -113,7 +162,8 @@ const App = () => {
     if (!isCorrectNetwork) {
       return (
         <div className="select-character-container">
-          <h2>You are on the wrong network! Please connect to Rinkeby and refresh to continue.</h2>
+          <h2>Please connect to the Rinkeby Test Network</h2>
+          <button className='cta-button mint-button' onClick={switchNetwork}>Click here to switch</button>
         </div>
       );
     }
