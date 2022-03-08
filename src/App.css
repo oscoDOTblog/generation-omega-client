@@ -106,6 +106,16 @@
   font-weight: bold;
 }
 
+.right{
+  display: flex;
+  background: black;
+  border-radius: 16px;
+  padding: 12px 20px;
+  height: 99%;
+  margin-right: 10%;
+  margin-top: 10px;
+}
+
 /* KeyFrames */
 @-webkit-keyframes gradient-animation {
   0% {

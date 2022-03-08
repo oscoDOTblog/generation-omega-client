@@ -5,7 +5,6 @@ import './App.css';
 import { CONTRACT_ADDRESS, transformCharacterData } from './constants';
 import generationOmega from './utils/GenerationOmega.json';
 import { ethers } from 'ethers';
-import { networks } from './utils/networks';
 
 // Custom Components
 import ExploreWasteland from './components/ExploreWasteland';
@@ -16,8 +15,6 @@ import SelectCharacter from './components/SelectCharacter';
 
 // Constants
 import twitterLogo from './assets/twitter-logo.svg';
-import polygonLogo from './assets/polygonlogo.png';
-import ethLogo from './assets/ethlogo.png';
 const TWITTER_HANDLE = 'GenerationOmega';
 const TWITTER_LINK = `https://twitter.com/${TWITTER_HANDLE}`;
 
@@ -289,7 +286,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Navbar setLocation={setLocation}/>
+      <Navbar setLocation={setLocation} currentAccount={currentAccount} network={''}/>
       <div className="container">
         <div className="header-container">
           <p className="header gradient-text">Generation Omega</p>
